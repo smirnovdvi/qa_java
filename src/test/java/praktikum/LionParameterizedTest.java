@@ -1,9 +1,5 @@
 package praktikum;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(Parameterized.class)
 public class LionParameterizedTest {
@@ -25,8 +20,8 @@ public class LionParameterizedTest {
     private IFeline mockFeline;
 
     private Lion lion;
-    private String sex;
-    private boolean expectedHasMane;
+    private final String sex;
+    private final boolean expectedHasMane;
 
     public LionParameterizedTest(String sex, boolean expectedHasMane) {
         this.sex = sex;
@@ -37,8 +32,7 @@ public class LionParameterizedTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
                 {"Самец", true},
-                {"Самка", false},
-                {"Неправильный пол", false} // Проверяем, что исключение не возникает
+                {"Самка", false}
         });
     }
 
@@ -50,5 +44,10 @@ public class LionParameterizedTest {
     @Test
     public void testDoesHaveMane() {
         assertEquals(expectedHasMane, lion.doesHaveMane());
+    }
+
+    @Test(expected = Exception.class)
+    public void testConstructorThrowsExceptionForInvalidSex() throws Exception {
+        new Lion("Неправильный пол", mockFeline); // Ожидается исключение
     }
 }
